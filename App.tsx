@@ -3,6 +3,7 @@ import { letters } from './constants/letters';
 import { Letter } from './types';
 import LetterList from './components/LetterList';
 import LetterDisplay from './components/LetterDisplay';
+import AnniversarySection from './components/AnniversarySection';
 
 const App: React.FC = () => {
   const [selectedLetter, setSelectedLetter] = useState<Letter | null>(null);
@@ -10,6 +11,21 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
+  const [showAnniversary, setShowAnniversary] = useState(false);
+
+  // Vérifier si nous sommes proches de la date d'anniversaire (20 novembre)
+  useEffect(() => {
+    const today = new Date();
+    const anniversary = new Date(today.getFullYear(), 10, 20); // Mois 10 = Novembre (0-indexé)
+    
+    // Si l'anniversaire est dans les 30 jours (avant ou après)
+    const timeDiff = Math.abs(anniversary.getTime() - today.getTime());
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    if (daysDiff <= 30) {
+      setShowAnniversary(true);
+    }
+  }, []);
 
   useEffect(() => {
     // Set the first letter as default on initial render and mark as read
@@ -76,6 +92,11 @@ const App: React.FC = () => {
         </div>
       </div>
     );
+  }
+
+  // Afficher la section d'anniversaire si c'est la période appropriée
+  if (showAnniversary) {
+    return <AnniversarySection />;
   }
 
   return (

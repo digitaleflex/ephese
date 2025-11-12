@@ -36,6 +36,19 @@ const App: React.FC = () => {
     }
   }, [isAuthenticated]);
 
+  // Gérer le retour aux lettres depuis la section d'anniversaire
+  useEffect(() => {
+    const handleReturnToLetters = () => {
+      setShowAnniversary(false);
+    };
+
+    window.addEventListener('returnToLetters', handleReturnToLetters);
+    
+    return () => {
+      window.removeEventListener('returnToLetters', handleReturnToLetters);
+    };
+  }, []);
+
   const handleCodeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (code === 'MYTYLYQVT') {
@@ -58,10 +71,10 @@ const App: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center p-4">
-        <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 w-full max-w-md">
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-cursive text-amber-300 mb-2">Lettres à mon Éphèse</h1>
-            <p className="text-gray-400 text-sm">Veuillez entrer le code secret pour accéder</p>
+        <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4 md:p-6 w-full max-w-md">
+          <div className="text-center mb-4 md:mb-6">
+            <h1 className="text-xl md:text-2xl font-cursive text-amber-300 mb-2">Lettres à mon Éphèse</h1>
+            <p className="text-gray-400 text-sm md:text-base">Veuillez entrer le code secret pour accéder</p>
           </div>
           
           <form onSubmit={handleCodeSubmit} className="space-y-4">
@@ -74,7 +87,7 @@ const App: React.FC = () => {
                 id="secretCode"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-base"
+                className="w-full px-3 py-2 md:px-4 md:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm md:text-base"
                 placeholder="Entrez le code secret"
               />
               {error && (
@@ -84,7 +97,7 @@ const App: React.FC = () => {
             
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-base"
+              className="w-full py-2 px-4 md:py-3 md:px-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-900 text-sm md:text-base"
             >
               Accéder
             </button>
@@ -101,8 +114,8 @@ const App: React.FC = () => {
 
   return (
     <div className="h-screen w-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex flex-col md:flex-row overflow-hidden">
-      <header className="md:hidden p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 text-center">
-        <h1 className="text-3xl font-cursive text-amber-300">Lettres à mon Éphèse</h1>
+      <header className="md:hidden p-3 md:p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 text-center">
+        <h1 className="text-2xl md:text-3xl font-cursive text-amber-300">Lettres à mon Éphèse</h1>
       </header>
       <LetterList 
         letters={letters} 

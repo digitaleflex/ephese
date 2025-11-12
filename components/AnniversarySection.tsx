@@ -12,6 +12,7 @@ const AnniversarySection: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [giftMessage, setGiftMessage] = useState(false);
+  const [isAnniversaryDay, setIsAnniversaryDay] = useState(false);
   const carouselRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
@@ -31,6 +32,13 @@ const AnniversarySection: React.FC = () => {
       const anniversaryDate = new Date('2025-11-20T00:00:00');
       const now = new Date();
       const difference = anniversaryDate.getTime() - now.getTime();
+
+      // Vérifier si nous sommes le jour de l'anniversaire
+      const isSameDay = now.getDate() === anniversaryDate.getDate() && 
+                        now.getMonth() === anniversaryDate.getMonth() && 
+                        now.getFullYear() === anniversaryDate.getFullYear();
+      
+      setIsAnniversaryDay(isSameDay);
 
       if (difference > 0) {
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -368,8 +376,8 @@ const AnniversarySection: React.FC = () => {
           </div>
         )}
 
-        {/* Message spécial - s'affiche après le compteur */}
-        {showLetter && (
+        {/* Message spécial - s'affiche après le compteur ou si c'est le jour de l'anniversaire */}
+        {(showLetter || isAnniversaryDay) && (
           <div className="mb-4 sm:mb-6 md:mb-10 relative">
             {/* Enveloppe animée */}
             <div className="flex justify-center mb-3 sm:mb-4 md:mb-6">
@@ -427,18 +435,24 @@ const AnniversarySection: React.FC = () => {
           </div>
         )}
 
-        {/* Bouton pour accéder à la galerie */}
+        {/* Bouton pour accéder à la galerie - protégé par la date */}
         <div className="text-center mb-4 sm:mb-6 md:mb-8">
-          <button 
-            onClick={() => setShowGallery(true)}
-            className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
-          >
-            Explorer la galerie de souvenirs
-          </button>
+          {isAnniversaryDay ? (
+            <button 
+              onClick={() => setShowGallery(true)}
+              className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
+            >
+              Explorer la galerie de souvenirs
+            </button>
+          ) : (
+            <div className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-800/50 to-purple-800/50 text-rose-200 font-medium rounded-lg sm:rounded-xl border border-rose-600/30 backdrop-blur-sm text-xs sm:text-sm md:text-base">
+              La galerie sera déverrouillée le jour de l'anniversaire
+            </div>
+          )}
         </div>
 
-        {/* Galerie spéciale - s'affiche au clic sur le bouton */}
-        {showGallery && (
+        {/* Galerie spéciale - s'affiche au clic sur le bouton et seulement le jour de l'anniversaire */}
+        {showGallery && isAnniversaryDay && (
           <div className="mb-4 sm:mb-6 md:mb-8">
             <div className="flex justify-between items-center mb-3 sm:mb-4">
               <h2 className="text-lg sm:text-xl md:text-3xl font-cursive text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-pink-300 to-purple-300">
@@ -500,19 +514,25 @@ const AnniversarySection: React.FC = () => {
           </div>
         )}
 
-        {/* Bouton voir les lettres - visible seulement si la galerie n'est pas affichée */}
+        {/* Bouton voir les lettres - protégé par la date et visible seulement si la galerie n'est pas affichée */}
         {!showGallery && (
           <div className="text-center mt-4 sm:mt-6 md:mt-10">
-            <button 
-              onClick={() => {
-                // Cacher la section d'anniversaire et retourner à l'application principale
-                const event = new CustomEvent('returnToLetters');
-                window.dispatchEvent(event);
-              }}
-              className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
-            >
-              Voir les lettres
-            </button>
+            {isAnniversaryDay ? (
+              <button 
+                onClick={() => {
+                  // Cacher la section d'anniversaire et retourner à l'application principale
+                  const event = new CustomEvent('returnToLetters');
+                  window.dispatchEvent(event);
+                }}
+                className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
+              >
+                Voir les lettres
+              </button>
+            ) : (
+              <div className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-800/50 to-purple-800/50 text-rose-200 font-medium rounded-lg sm:rounded-xl border border-rose-600/30 backdrop-blur-sm text-xs sm:text-sm md:text-base">
+                Les lettres seront déverrouillées le jour de l'anniversaire
+              </div>
+            )}
           </div>
         )}
       </div>

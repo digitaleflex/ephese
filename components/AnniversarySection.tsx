@@ -12,7 +12,7 @@ const AnniversarySection: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [giftMessage, setGiftMessage] = useState(false);
-  const [isAnniversaryDay, setIsAnniversaryDay] = useState(false);
+  const [isAnniversaryDay, setIsAnniversaryDay] = useState(true); // Temporairement true pour les tests
   const carouselRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
@@ -33,10 +33,8 @@ const AnniversarySection: React.FC = () => {
       const now = new Date();
       const difference = anniversaryDate.getTime() - now.getTime();
 
-      // Vérifier si nous sommes le jour de l'anniversaire
-      const isSameDay = now.getDate() === anniversaryDate.getDate() && 
-                        now.getMonth() === anniversaryDate.getMonth() && 
-                        now.getFullYear() === anniversaryDate.getFullYear();
+      // Pour les tests, on simule que c'est toujours le jour de l'anniversaire
+      const isSameDay = true; // Temporairement true pour les tests
       
       setIsAnniversaryDay(isSameDay);
 
@@ -202,6 +200,11 @@ const AnniversarySection: React.FC = () => {
         onClick={() => setSelectedImage(null)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
+        onTouchEnd={() => {
+          // Réinitialiser les valeurs pour éviter les déclenchements multiples
+          touchStartX.current = 0;
+          touchStartY.current = 0;
+        }}
       >
         <div 
           className="relative max-w-4xl max-h-[90vh] w-full flex items-center"
@@ -226,6 +229,13 @@ const AnniversarySection: React.FC = () => {
               src={`/image${selectedImage}.jpg`} 
               alt={`Souvenir spécial ${selectedImage} agrandi`} 
               className="max-w-full max-h-[70vh] sm:max-h-[80vh] object-contain rounded-lg sm:rounded-xl shadow-2xl"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={() => {
+                // Réinitialiser les valeurs pour éviter les déclenchements multiples
+                touchStartX.current = 0;
+                touchStartY.current = 0;
+              }}
             />
           </div>
           
@@ -435,24 +445,19 @@ const AnniversarySection: React.FC = () => {
           </div>
         )}
 
-        {/* Bouton pour accéder à la galerie - protégé par la date */}
+        {/* Bouton pour accéder à la galerie - temporairement déverrouillé pour les tests */}
         <div className="text-center mb-4 sm:mb-6 md:mb-8">
-          {isAnniversaryDay ? (
-            <button 
-              onClick={() => setShowGallery(true)}
-              className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
-            >
-              Explorer la galerie de souvenirs
-            </button>
-          ) : (
-            <div className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-800/50 to-purple-800/50 text-rose-200 font-medium rounded-lg sm:rounded-xl border border-rose-600/30 backdrop-blur-sm text-xs sm:text-sm md:text-base">
-              La galerie sera déverrouillée le jour de l'anniversaire
-            </div>
-          )}
+          {/* Pour les tests, la galerie est toujours accessible */}
+          <button 
+            onClick={() => setShowGallery(true)}
+            className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
+          >
+            Explorer la galerie de souvenirs (Test)
+          </button>
         </div>
 
-        {/* Galerie spéciale - s'affiche au clic sur le bouton et seulement le jour de l'anniversaire */}
-        {showGallery && isAnniversaryDay && (
+        {/* Galerie spéciale - s'affiche au clic sur le bouton (temporairement sans restriction de date) */}
+        {showGallery && (
           <div className="mb-4 sm:mb-6 md:mb-8">
             <div className="flex justify-between items-center mb-3 sm:mb-4">
               <h2 className="text-lg sm:text-xl md:text-3xl font-cursive text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-pink-300 to-purple-300">
@@ -488,6 +493,11 @@ const AnniversarySection: React.FC = () => {
                   className="relative rounded-2xl overflow-hidden shadow-xl border-2 sm:border-4 border-rose-400/50 animate-float"
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
+                  onTouchEnd={() => {
+                    // Réinitialiser les valeurs pour éviter les déclenchements multiples
+                    touchStartX.current = 0;
+                    touchStartY.current = 0;
+                  }}
                 >
                   <img 
                     src={`/image${currentSlide + 1}.jpg`} 
@@ -508,31 +518,35 @@ const AnniversarySection: React.FC = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 sm:gap-2 md:gap-4 max-h-48 sm:max-h-64 md:max-h-96 overflow-y-auto p-1 sm:p-2 bg-rose-900/20 rounded-lg sm:rounded-xl">
+            <div 
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 sm:gap-2 md:gap-4 max-h-48 sm:max-h-64 md:max-h-96 overflow-y-auto p-1 sm:p-2 bg-rose-900/20 rounded-lg sm:rounded-xl"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={() => {
+                // Réinitialiser les valeurs pour éviter les déclenchements multiples
+                touchStartX.current = 0;
+                touchStartY.current = 0;
+              }}
+            >
               {renderImageGallery()}
             </div>
           </div>
         )}
 
-        {/* Bouton voir les lettres - protégé par la date et visible seulement si la galerie n'est pas affichée */}
+        {/* Bouton voir les lettres - temporairement déverrouillé pour les tests */}
         {!showGallery && (
           <div className="text-center mt-4 sm:mt-6 md:mt-10">
-            {isAnniversaryDay ? (
-              <button 
-                onClick={() => {
-                  // Cacher la section d'anniversaire et retourner à l'application principale
-                  const event = new CustomEvent('returnToLetters');
-                  window.dispatchEvent(event);
-                }}
-                className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
-              >
-                Voir les lettres
-              </button>
-            ) : (
-              <div className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-800/50 to-purple-800/50 text-rose-200 font-medium rounded-lg sm:rounded-xl border border-rose-600/30 backdrop-blur-sm text-xs sm:text-sm md:text-base">
-                Les lettres seront déverrouillées le jour de l'anniversaire
-              </div>
-            )}
+            {/* Pour les tests, le bouton est toujours accessible */}
+            <button 
+              onClick={() => {
+                // Cacher la section d'anniversaire et retourner à l'application principale
+                const event = new CustomEvent('returnToLetters');
+                window.dispatchEvent(event);
+              }}
+              className="px-3 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-700 hover:to-purple-700 text-white font-medium rounded-lg sm:rounded-xl transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-opacity-50 shadow-lg hover:shadow-rose-500/30 text-xs sm:text-sm md:text-base"
+            >
+              Voir les lettres (Test)
+            </button>
           </div>
         )}
       </div>

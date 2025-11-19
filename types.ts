@@ -8,4 +8,6 @@ export interface Letter {
     type: string;
     text: string;
   };
+  isChoiceOption?: boolean;
+  choiceGroupId?: number;
 }

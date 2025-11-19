@@ -899,7 +899,7 @@ Dans ces moments suspendus où les mots n’existent plus,
 où l’air se charge de vérité,
 où chaque souffle est une échappée vers l'infini.
 Quand je suis avec toi,
-je m'évade des conventions, des normes,
+je m’évade des conventions, des normes,
 du quotidien qui nous écrase.
 Je me perds, mais je me trouve.
 Tu es mon refuge.
@@ -943,5 +943,43 @@ Joyeux anniversaire, mon Éphèse. Puisse cette journée être aussi merveilleus
 Avec tout mon amour,
 Ton compagnon de l'invisible`,
     author: 'Ton âme sœur',
+  },
+  {
+    id: 32,
+    title: 'Ballade sur la plage',
+    content: `Ma chère Éphèse,
+
+Je voudrais t'offrir un cadeau spécial, un moment rien qu'à nous deux, loin du tumulte du monde. Imagine avec moi...
+
+Une ballade sur la plage, nos pieds nus dans le sable chaud, les vagues venant caresser nos orteils. Le soleil se reflétant sur l'eau comme des milliers de diamants scintillants. Le bruit apaisant de l'océan qui berce nos âmes et nos pensées.
+
+Un moment de détente absolu, allongés sur une grande serviette, à ne rien faire d'autre que savourer la présence de l'autre. À regarder les nuages prendre des formes imaginaires, à sentir la brise marine caresser notre peau.
+
+Et pour couronner cette journée parfaite, un dîner dans un restaurant de ton choix, où nous pourrons parler de tout et de rien, rire ensemble, partager nos regards complices, et savourer chaque instant précieux que nous passerons ensemble.
+
+C'est un cadeau simple, mais empreint de toute mon attention pour toi. Parce que le plus beau cadeau que je puisse t'offrir, c'est du temps, notre temps, rien qu'à nous.
+
+Avec tout mon amour,
+Ton compagnon de l'invisible`,
+    author: 'Ton âme sœur',
+  },
+  {
+    id: 33,
+    title: 'Votre cadeau spécial',
+    content: `Ma chère Éphèse,
+
+Il est temps de vous offrir un cadeau spécial, un moment unique que nous passerons ensemble. Mais cette fois, c'est à vous de choisir ce que vous préférez parmi les trois options que j'ai préparées avec amour.
+
+Chacune de ces options a été pensée spécialement pour vous, en tenant compte de vos goûts et de vos désirs. Prenez le temps de réfléchir à ce qui vous ferait le plus plaisir.
+
+Cliquez sur le bouton ci-dessous pour découvrir les options et faire votre choix. Une fois votre décision prise, les autres options disparaîtront pour préserver la surprise et l'unicité de votre cadeau.
+
+Avec tout mon amour,
+Ton compagnon de l'invisible`,
+    author: 'Ton âme sœur',
+    specialNote: {
+      type: 'Cadeau spécial',
+      text: 'Cliquez sur le bouton ci-dessous pour choisir votre cadeau'
+    }
   },
 ];

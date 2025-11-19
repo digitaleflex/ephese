@@ -11,6 +11,11 @@ interface LetterListProps {
 const LetterList: React.FC<LetterListProps> = ({ letters, selectedLetter, onSelectLetter, readLetters }) => {
   const listRef = useRef<HTMLDivElement>(null);
 
+  // Filtrer les lettres pour masquer les options de cadeaux (ID 101, 102, 103)
+  const filteredLetters = letters.filter(letter => 
+    letter.id !== 101 && letter.id !== 102 && letter.id !== 103
+  );
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
       return;
@@ -19,9 +24,9 @@ const LetterList: React.FC<LetterListProps> = ({ letters, selectedLetter, onSele
 
     let nextIndex;
     if (event.key === 'ArrowDown') {
-      nextIndex = (currentIndex + 1) % letters.length;
+      nextIndex = (currentIndex + 1) % filteredLetters.length;
     } else { // ArrowUp
-      nextIndex = (currentIndex - 1 + letters.length) % letters.length;
+      nextIndex = (currentIndex - 1 + filteredLetters.length) % filteredLetters.length;
     }
     
     if (listRef.current) {
@@ -45,7 +50,7 @@ const LetterList: React.FC<LetterListProps> = ({ letters, selectedLetter, onSele
         aria-label="Liste des lettres"
         className="flex flex-row md:flex-col overflow-x-auto md:overflow-y-auto md:h-[calc(100vh-89px)] p-2 md:p-4 gap-2"
       >
-        {letters.map((letter, index) => (
+        {filteredLetters.map((letter, index) => (
           <button
             key={letter.id}
             onClick={() => onSelectLetter(letter)}

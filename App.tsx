@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { letters } from './constants/letters';
 import { Letter } from './types';
 import LetterList from './components/LetterList';
 import LetterDisplay from './components/LetterDisplay';
 import AnniversarySection from './components/AnniversarySection';
-import ChoiceConfirmation from './components/ChoiceConfirmation';
 import GiftOptions from './components/GiftOptions';
 
 const App: React.FC = () => {
@@ -14,24 +13,13 @@ const App: React.FC = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [showAnniversary, setShowAnniversary] = useState(false);
-  const [chosenOption, setChosenOption] = useState<number | null>(null);
-  const [isChoiceAvailable, setIsChoiceAvailable] = useState(false);
-  const [giftChoice, setGiftChoice] = useState<string | null>(null);
   const [showGiftOptions, setShowGiftOptions] = useState(false);
-  const letterDisplayRef = useRef<{ revealContent: () => void }>(null);
+  const [chosenGiftOption, setChosenGiftOption] = useState<string | null>(null);
 
-  // Vérifier si nous sommes proches de la date d'anniversaire (20 novembre) ou si c'est pour les tests
+  // Vérifier si nous sommes proches de la date d'anniversaire (20 novembre)
   useEffect(() => {
     const today = new Date();
-    const anniversary = new Date(2025, 10, 20); // 20 novembre 2025 (Mois 10 = Novembre, 0-indexé)
-    
-    // Pour les tests, déverrouiller si nous sommes le 19/11/2025 ou après
-    const testUnlockDate = new Date(2025, 10, 19); // 19 novembre 2025
-    
-    // Si c'est la période de test (19/11/2025) ou si l'anniversaire est dans les 30 jours
-    if (today >= testUnlockDate || Math.abs(anniversary.getTime() - today.getTime()) <= 30 * 24 * 60 * 60 * 1000) {
-      setIsChoiceAvailable(true);
-    }
+    const anniversary = new Date(today.getFullYear(), 10, 20); // Mois 10 = Novembre (0-indexé)
     
     // Si l'anniversaire est dans les 30 jours (avant ou après)
     const timeDiff = Math.abs(anniversary.getTime() - today.getTime());
@@ -81,59 +69,28 @@ const App: React.FC = () => {
       newReadLetters.add(letter.id);
       return newReadLetters;
     });
-    
-    // Si la lettre est une option de choix, enregistrer le choix
-    if (letter.isChoiceOption && letter.choiceGroupId) {
-      setChosenOption(letter.choiceGroupId);
-    }
-    
-    // Réinitialiser l'affichage des options de cadeaux
-    if (letter.id !== 33) {
-      setShowGiftOptions(false);
-    }
-  };
-
-  const handleResetChoice = () => {
-    setChosenOption(null);
-    setGiftChoice(null);
-    setShowGiftOptions(false);
-    // Réinitialiser la sélection à la lettre de choix
-    const choiceLetter = letters.find(letter => letter.id === 33);
-    if (choiceLetter) {
-      setSelectedLetter(choiceLetter);
-    }
-  };
-
-  const handleGiftChoice = (choice: string) => {
-    setGiftChoice(choice);
-    // Révéler le contenu de la lettre spéciale
-    if (letterDisplayRef.current) {
-      letterDisplayRef.current.revealContent();
-    }
   };
 
   const handleOpenGiftOptions = () => {
     setShowGiftOptions(true);
   };
 
-  // Filtrer les lettres en fonction du choix effectué
-  const filteredLetters = letters.filter(letter => {
-    // Masquer les lettres de choix si elles ne sont pas encore disponibles
-    if ((letter.id === 33 || letter.isChoiceOption) && !isChoiceAvailable) {
-      return false;
+  const handleGiftChoice = (choice: string) => {
+    setChosenGiftOption(choice);
+    // Après avoir fait un choix, on révèle le contenu de la lettre 33
+    if (selectedLetter && selectedLetter.id === 33) {
+      // On force la révélation du contenu
+      setTimeout(() => {
+        const event = new CustomEvent('revealLetter33Content');
+        window.dispatchEvent(event);
+      }, 100);
     }
-    
-    // Si un choix a été fait, masquer les autres options du même groupe
-    if (chosenOption && letter.isChoiceOption && letter.choiceGroupId === chosenOption) {
-      // Masquer les autres options du même groupe
-      return letter.id === selectedLetter?.id || !letter.isChoiceOption;
-    }
-    // Masquer également la lettre de présentation des choix si un choix a été fait
-    if (chosenOption && letter.id === 33) {
-      return false;
-    }
-    return true;
-  });
+  };
+
+  const handleResetGiftChoice = () => {
+    setChosenGiftOption(null);
+    setShowGiftOptions(false);
+  };
 
   if (!isAuthenticated) {
     return (
@@ -174,43 +131,35 @@ const App: React.FC = () => {
     );
   }
 
-  // Afficher la section d'anniversaire si c'est la période appropriée
-  if (showAnniversary) {
-    return <AnniversarySection />;
-  }
-
-  // Afficher les options de cadeaux si disponible et si c'est le bon moment
-  if (isChoiceAvailable && showGiftOptions) {
+  // Afficher les options de cadeaux si demandé
+  if (showGiftOptions) {
     return (
-      <div className="h-screen w-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex flex-col md:flex-row overflow-hidden">
-        <header className="md:hidden p-3 md:p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 text-center">
-          <h1 className="text-2xl md:text-3xl font-cursive text-amber-300">Lettres à mon Éphèse</h1>
+      <div className="h-screen w-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex flex-col overflow-hidden">
+        <header className="p-3 md:p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 text-center">
+          <h1 className="text-xl md:text-2xl font-cursive text-amber-300">Votre cadeau spécial</h1>
         </header>
         <GiftOptions 
           onChoiceMade={handleGiftChoice} 
-          onResetChoice={handleResetChoice} 
-          chosenOption={giftChoice} 
+          onResetChoice={handleResetGiftChoice}
+          chosenOption={chosenGiftOption}
         />
+        {chosenGiftOption && (
+          <div className="p-4 border-t border-gray-700/50 bg-gray-900/50">
+            <button
+              onClick={handleResetGiftChoice}
+              className="w-full py-2 px-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+            >
+              Retour aux lettres
+            </button>
+          </div>
+        )}
       </div>
     );
   }
 
-  // Afficher la confirmation de choix si un choix a été fait
-  if (chosenOption && selectedLetter?.isChoiceOption) {
-    return (
-      <div className="h-screen w-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex flex-col md:flex-row overflow-hidden">
-        <header className="md:hidden p-3 md:p-4 bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 text-center">
-          <h1 className="text-2xl md:text-3xl font-cursive text-amber-300">Lettres à mon Éphèse</h1>
-        </header>
-        <LetterList 
-          letters={filteredLetters} 
-          selectedLetter={selectedLetter} 
-          onSelectLetter={handleSelectLetter} 
-          readLetters={readLetters}
-        />
-        <ChoiceConfirmation onResetChoice={handleResetChoice} />
-      </div>
-    );
+  // Afficher la section d'anniversaire si c'est la période appropriée
+  if (showAnniversary) {
+    return <AnniversarySection />;
   }
 
   return (
@@ -219,13 +168,12 @@ const App: React.FC = () => {
         <h1 className="text-2xl md:text-3xl font-cursive text-amber-300">Lettres à mon Éphèse</h1>
       </header>
       <LetterList 
-        letters={filteredLetters} 
+        letters={letters} 
         selectedLetter={selectedLetter} 
         onSelectLetter={handleSelectLetter} 
         readLetters={readLetters}
       />
       <LetterDisplay 
-        ref={letterDisplayRef}
         letter={selectedLetter} 
         onOpenGiftOptions={handleOpenGiftOptions} 
       />

@@ -24,6 +24,19 @@ const LetterDisplay = forwardRef((props: LetterDisplayProps, ref) => {
     }
   }, [letter]);
 
+  // Gérer la révélation du contenu de la lettre 33 après le choix du cadeau
+  useEffect(() => {
+    const handleRevealContent = () => {
+      setShowContent(true);
+    };
+
+    window.addEventListener('revealLetter33Content', handleRevealContent);
+    
+    return () => {
+      window.removeEventListener('revealLetter33Content', handleRevealContent);
+    };
+  }, []);
+
   // Exposer la fonction de révélation du contenu via la référence
   useImperativeHandle(ref, () => ({
     revealContent: () => {

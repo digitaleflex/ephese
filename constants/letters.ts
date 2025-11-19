@@ -982,4 +982,63 @@ Ton compagnon de l'invisible`,
       text: 'Cliquez sur le bouton ci-dessous pour choisir votre cadeau'
     }
   },
+  
+  // Options de cadeaux - Ces lettres ne seront pas affichées dans la liste principale
+  // mais seront accessibles après le choix de l'utilisateur
+  {
+    id: 101,
+    title: 'Ballade sur la plage',
+    content: `Ma chère Éphèse,
+
+Vous avez choisi l'option A : Une ballade sur la plage.
+
+Je prévois pour vous une journée romantique au bord de l'eau, avec une promenade main dans la main sur le sable, un moment de détente sur une grande serviette à écouter le bruit des vagues, et la contemplation d'un coucher de soleil enchanteur qui illuminera nos visages.
+
+Cette journée sera entièrement dédiée à nous deux, loin du monde et de ses tracas, pour profiter de la beauté de la nature et de notre amour.
+
+Je m'occupe de tous les détails pour que cette journée soit parfaite. Préparez-vous à vivre un moment magique et inoubliable.
+
+Avec tout mon amour,
+Ton compagnon de l'invisible`,
+    author: 'Ton âme sœur',
+    isChoiceOption: true
+  },
+  
+  {
+    id: 102,
+    title: 'Dîner dans un restaurant',
+    content: `Ma chère Éphèse,
+
+Vous avez choisi l'option B : Un dîner dans un restaurant de votre choix.
+
+Je vous propose un moment gastronomique exceptionnel dans le restaurant que vous souhaitez. Que ce soit un établissement gastronomique réputé, un petit bistrot charmant ou un restaurant avec une vue imprenable, je m'occuperai de réserver la table et de tout organiser.
+
+Nous pourrons savourer ensemble un menu personnalisé selon vos goûts, partager des plats délicieux et des vins sélectionnés avec soin. Ce sera un moment privilégié rien qu'à nous deux, pour parler, rire et créer de nouveaux souvenirs.
+
+Je prends en charge tous les arrangements pour que cette soirée soit aussi parfaite que vous l'imaginez.
+
+Avec tout mon amour,
+Ton compagnon de l'invisible`,
+    author: 'Ton âme sœur',
+    isChoiceOption: true
+  },
+  
+  {
+    id: 103,
+    title: 'Cadeau personnalisé',
+    content: `Ma chère Éphèse,
+
+Vous avez choisi l'option C : Un cadeau personnalisé.
+
+Pour cette option, vous avez la liberté totale de choisir le cadeau que vous souhaitez recevoir. Que ce soit un voyage dans la destination de vos rêves, un objet précieux que vous convoitez, ou une expérience unique que vous aimeriez vivre, je ferai tout mon possible pour réaliser votre vœu le plus cher.
+
+Dites-moi simplement ce que vous souhaitez, et je m'occuperai de tous les détails pour vous l'offrir. Rien n'est trop beau ni trop difficile pour vous, mon Éphèse.
+
+Votre bonheur est ma priorité absolue, et je veux que ce cadeau soit exactement ce qui vous rendra heureuse.
+
+Avec tout mon amour,
+Ton compagnon de l'invisible`,
+    author: 'Ton âme sœur',
+    isChoiceOption: true
+  },
 ];

@@ -24,7 +24,8 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             'Promenade main dans la main sur le sable',
             'Moment de détente sur une grande serviette',
             'Contemplation du coucher de soleil'
-          ]
+          ],
+          letterId: 101
         };
       case 'B':
         return {
@@ -34,7 +35,8 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             'Restaurant de votre choix',
             'Menu personnalisé selon vos goûts',
             'Moment privilégié rien qu\'à nous deux'
-          ]
+          ],
+          letterId: 102
         };
       case 'C':
         return {
@@ -44,13 +46,15 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             'Liberté totale de choisir',
             'Voyage, objet précieux ou expérience unique',
             'Réalisation de votre vœu le plus cher'
-          ]
+          ],
+          letterId: 103
         };
       default:
         return {
           title: '',
           description: '',
-          details: []
+          details: [],
+          letterId: 0
         };
     }
   };
@@ -119,7 +123,7 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             className={`bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border-2 p-6 cursor-pointer transition-all duration-300 hover:scale-105 ${
               selectedOption === 'A' 
                 ? 'border-amber-500 shadow-lg shadow-amber-500/20 filter-none' 
-                : 'border-gray-700 hover:border-amber-400 filter blur-lg'
+                : 'border-gray-700 hover:border-amber-400 filter blur-sm'
             }`}
             onClick={() => handleSelectOption('A')}
           >
@@ -162,7 +166,7 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             className={`bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border-2 p-6 cursor-pointer transition-all duration-300 hover:scale-105 ${
               selectedOption === 'B' 
                 ? 'border-amber-500 shadow-lg shadow-amber-500/20 filter-none' 
-                : 'border-gray-700 hover:border-amber-400 filter blur-lg'
+                : 'border-gray-700 hover:border-amber-400 filter blur-sm'
             }`}
             onClick={() => handleSelectOption('B')}
           >
@@ -205,7 +209,7 @@ const GiftOptions: React.FC<GiftOptionsProps> = ({ onChoiceMade, onResetChoice, 
             className={`bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border-2 p-6 cursor-pointer transition-all duration-300 hover:scale-105 ${
               selectedOption === 'C' 
                 ? 'border-amber-500 shadow-lg shadow-amber-500/20 filter-none' 
-                : 'border-gray-700 hover:border-amber-400 filter blur-lg'
+                : 'border-gray-700 hover:border-amber-400 filter blur-sm'
             }`}
             onClick={() => handleSelectOption('C')}
           >
